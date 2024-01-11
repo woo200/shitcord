@@ -639,7 +639,7 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     print("Opened connection and sent HELLO")
-    helo = json.load(open("data/helo.json"))
+    helo = json.load(open("/app/data/helo.json"))
     ws.send(json.dumps(helo))
 
 def ws_on_error(ws, error):
