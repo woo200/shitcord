@@ -1,4 +1,4 @@
-FROM python:3.10.13-bookworm AS pyrobot
+FROM python:3.10.13-bookworm AS shitcord
 
 WORKDIR /app/
 

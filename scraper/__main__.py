@@ -77,10 +77,8 @@ def on_message(ws, message):
         myself = "1129767250342195222"
         write_message(parsed)
         if parsed.channel_id in sessions:
-            if sessions[parsed.channel_id][1] > CONTEXT:
-                with open("/app/data/training_data.bin", "ab+") as f:
-                    f.write(struct.pack("Q", len(sessions[parsed.channel_id][0])))
-                    f.write(sessions[parsed.channel_id][0].encode("utf-8"))
+            if sessions[parsed.channel_id][1] > CONTEXT or time.time() - sessions[parsed.channel_id][2] > 120:
+                r.lpush(f"training_data", sessions[parsed.channel_id][0])
                 del sessions[parsed.channel_id]
 
         if parsed.author.id == myself:
@@ -111,7 +109,7 @@ def on_message(ws, message):
                 format += f"<END>\n"
 
             if parsed.channel_id not in sessions:
-                sessions[parsed.channel_id] = [format, 1]
+                sessions[parsed.channel_id] = [format, 1, time.time()]
             else:
                 sessions[parsed.channel_id][0] = format
                 sessions[parsed.channel_id][1] += 1
